@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block title %}MedBot | Home{% endblock %}
+
+
+{% block content %}
+	<form action="{% url 'registerC' %}" method="POST">
+		{% csrf_token %}
+		<div class="form-row">
+		  <div class="form-group col-md-6">
+		    <label for="inputName">Full Name</label>
+		    <input type="text" class="form-control" id="inputCity" name="username" required="True">
+		  </div>
+		</div>
+		<div class="form-row">
+		  <div class="form-group col-md-6">
+		    <label for="inputEmail4">Email</label>
+		    <input type="email" class="form-control" id="inputEmail4" name="email" required="True">
+		  </div>
+		  <div class="form-group col-md-6">
+		    <label for="inputPassword4">Password</label>
+		    <input type="password" class="form-control" id="inputPassword4" name="password" required="True">
+		  </div>
+		</div>
+		<div class="form-group">
+		  <label for="inputAddress">Address</label>
+		  <input type="text" class="form-control" id="inputAddress" placeholder="1234 Main St" name="address" required="True">
+		</div>
+		<div class="form-row">
+		  <div class="form-group col-md-6">
+		    <label for="inputPhone">Phone</label>
+		    <input type="text" class="form-control" id="inputCity" name="phone" required="True">
+		  </div>
+		</div>
+		<div class="form-row">
+		  <div class="col">
+		  	<label for="inputBirthDay">Birth year</label>
+		    <input type="text" class="form-control" placeholder="Year" name="year">
+		  </div>
+		  <div class="col">
+		  	<label for="inputBirthDay">Month</label>
+		    <input type="text" class="form-control" placeholder="Month" name="month">
+		  </div>
+		  <div class="col">
+		  	<label for="inputBirthDay">Day</label>
+		    <input type="text" class="form-control" placeholder="Day" name="day">
+		  </div>
+		</div>
+		<div class="form-row">
+			<div class="col-auto">
+				<button type="submit" class="btn btn-primary my-4">Sign up</button>
+			</div>
+		</div>
+	</form>
+
+{% endblock %}

@@ -1,6 +1,6 @@
-{% extends 'base.html' %}
+{% extends 'baseE.html' %}
 
-{% block title %}MedBot | Home{% endblock %}
+{% block title %}MedBot | Pharmacy Owner{% endblock %}
 
 
 {% block content %}
@@ -15,5 +15,12 @@
 		{% endfor %}
 	</table>
 	{% endif %}
+	<h1>I am {{ request.session.userId }}</h1>
+	<form action="{% url 'logoutC' %}" method="POST">
+	  {% csrf_token %}
+		<div>
+			<button  type="submit" class="btn btn-primary">log out</button>
+		</div>
+	</form>
 
 {% endblock %}

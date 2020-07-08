@@ -1,0 +1,27 @@
+{% extends 'baseA.html' %}
+
+{% block title %}MedBot | Admin{% endblock %}
+
+
+{% block content %}
+
+	{% if all %}
+	<table class="table table-dark">
+		{% for things in all %}
+			<tr>
+				<td>{{ things.med_name }}</td>
+				<td><center>{{ things.med_generic }}</center></td>
+				<td><center>{{ things.med_price }}</td>
+				<td><center>
+		{% endfor %}
+	</table>
+	{% endif %}
+	<h1>I am {{ request.session.userId }}</h1>
+	<form action="{% url 'logoutC' %}" method="POST">
+	  {% csrf_token %}
+		<div>
+			<button  type="submit" class="btn btn-primary">log out</button>
+		</div>
+	</form>
+
+{% endblock %}
