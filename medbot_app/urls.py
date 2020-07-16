@@ -11,4 +11,5 @@ urlpatterns = [
     path('myaccount', views.settingsC, name='settingsC'),
     path('Admin-Page', views.loginA, name='adminpage'),
     path('Pharmacy', views.loginE, name='pharmacypage'),
+    path('added/<list_id>', views.add_cart, name='add'),
 ]

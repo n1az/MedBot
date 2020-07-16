@@ -119,9 +119,22 @@ class Order(models.Model):
 	delivery_id = models.ForeignKey(Delivery, on_delete = models.CASCADE)
 	delivery_status = models.CharField(max_length = 3, choices = DELIVERYSTATUS, default = ONPROCESS)
 	rating = models.IntegerField()
+	order_quantity = models.IntegerField(default= 5)
+	med_ids = models.ManyToManyField(Inventory)
 
 	def __str__(self):
 		return str(self.order_id)
+
+class Cart(models.Model):
+
+	cart_id = models.BigAutoField(primary_key = True)
+	pharmacy_id = models.ForeignKey(Employee, on_delete = models.CASCADE)
+	customer_id = models.ForeignKey(Customer, on_delete = models.CASCADE)
+	adding_quantity = models.IntegerField(default= 5)
+	med_ids = models.ManyToManyField(Inventory)
+
+	def __str__(self):
+		return str(self.cart_id)
 
 
 class Admin(models.Model):

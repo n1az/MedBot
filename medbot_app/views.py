@@ -1,12 +1,12 @@
 from django.shortcuts import render, redirect
 from .models import Inventory, Customer, Admin, Employee
 from django.http import HttpResponse
+from django.contrib import messages
 from django.contrib.auth import authenticate
 
 def home(request):
 	obj = Inventory.objects.all()
 	context = {'all': obj}
-	
 	return render(request, 'home.html', context)
 
 def about(request):
@@ -107,3 +107,7 @@ def createUser(request):
 
 def settingsC(request):
 	return render(request, 'settingsC.html', {})
+
+def add_cart(request, list_id):
+	messages.success(request, ('Item added to the cart'))
+	return redirect('home')
