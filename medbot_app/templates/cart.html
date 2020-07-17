@@ -1,0 +1,23 @@
+{% extends 'baseC.html' %}
+
+{% block title %}MedBot | Home{% endblock %}
+
+
+
+{% block content %}
+
+	{% if all %}
+	<div class="table-responsive">
+		<table class="table table-dark">
+			{% for things in all %}
+				<tr>
+					<td>{{ things.med_id }}</td>
+					<td><center>{{ things.pharmacy_id }}</center></td>
+					<td><center>{{ things.customer_id }}</td>
+					
+			{% endfor %}
+		</table>
+	</div>
+	{% endif %}
+
+{% endblock %}

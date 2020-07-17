@@ -131,7 +131,7 @@ class Cart(models.Model):
 	pharmacy_id = models.ForeignKey(Employee, on_delete = models.CASCADE)
 	customer_id = models.ForeignKey(Customer, on_delete = models.CASCADE)
 	adding_quantity = models.IntegerField(default= 5)
-	med_ids = models.ManyToManyField(Inventory)
+	med_id = models.ForeignKey(Inventory, on_delete = models.CASCADE)
 
 	def __str__(self):
 		return str(self.cart_id)

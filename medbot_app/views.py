@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Inventory, Customer, Admin, Employee
+from .models import Inventory, Customer, Admin, Employee, Cart
 from django.http import HttpResponse
 from django.contrib import messages
 from django.contrib.auth import authenticate
@@ -12,13 +12,17 @@ def home(request):
 def about(request):
 	return render(request, 'about.html', {})
 
+def customerPortal(request):
+	obj = Inventory.objects.all()
+	context = {'all': obj}
+	return render(request, 'customer.html', context)
+
 def loginC(request):
 	if request.session.is_empty():
 		return render(request, 'loginportal.html', {})
 	else:
-		obj = Inventory.objects.all()
-		context = {'all': obj}
-		return render(request, 'customer.html', context)
+		return redirect('customerx')
+
 
 def loginCustomer(request):
 	obj = Inventory.objects.all()
@@ -29,7 +33,7 @@ def loginCustomer(request):
 		if Customer.objects.filter(customer_email = username).exists():
 			userX = Customer.objects.get(customer_email = username)
 			if password == userX.customer_password:
-				request.session['userId'] = userX.customer_name
+				request.session['userId'] = userX.customer_id
 				request.session.set_expiry(300)
 				return render(request, 'customer.html', context)
 			else:
@@ -37,7 +41,7 @@ def loginCustomer(request):
 		elif Employee.objects.filter(employee_email = username).exists():
 			userE = Employee.objects.get(employee_email = username)
 			if password == userE.employee_password:
-				request.session['userId'] = userE.owner_name
+				request.session['userId'] = userE.pharmacy_id
 				request.session.set_expiry(300)
 				response = redirect('pharmacypage')
 				return response
@@ -46,7 +50,7 @@ def loginCustomer(request):
 		elif Admin.objects.filter(admin_email = username).exists():
 			userA = Admin.objects.get(admin_email = username)
 			if password == userA.admin_password:
-				request.session['userId'] = userA.admin_name
+				request.session['userId'] = userA.admin_id
 				request.session.set_expiry(300)
 				response = redirect('adminpage')
 				return response
@@ -109,5 +113,19 @@ def settingsC(request):
 	return render(request, 'settingsC.html', {})
 
 def add_cart(request, list_id):
-	messages.success(request, ('Item added to the cart'))
-	return redirect('home')
+	if request.session.is_empty():
+		return redirect('loginC')
+	else:
+		obj = Inventory.objects.get(med_id = list_id)
+		objC = Cart(pharmacy_id = obj.pharmacy_id, customer_id =  Customer.objects.get(customer_id = request.session['userId']), adding_quantity = 5, med_id = obj)
+		objC.save()
+		messages.success(request, ('Item added to the cart'))
+		return redirect('home')
+
+def cart(request):
+	if request.session.is_empty():
+		return redirect('loginC')
+	else:
+		obj = Cart.objects.filter(customer_id = request.session['userId'])
+		context = {'all': obj}
+		return render(request, 'cart.html', context)
