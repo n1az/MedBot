@@ -18,7 +18,7 @@
 	{% endif %}
 	<h1>I am {{ request.session.userId }}</h1>
 	<form action="{% url 'logoutC' %}" method="POST">
-	  {% csrf_token %}
+	 {% csrf_token %}
 		<div>
 			<button  type="submit" class="btn btn-primary">log out</button>
 		</div>

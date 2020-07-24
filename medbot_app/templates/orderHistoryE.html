@@ -15,11 +15,5 @@
 		{% endfor %}
 	</table>
 	{% endif %}
-	<form action="{% url 'orderHistory' %}" method="POST">
-	  {% csrf_token %}
-		<div>
-			<button  type="submit" class="btn btn-primary">Order Histories</button>
-		</div>
-	</form>
 
 {% endblock %}

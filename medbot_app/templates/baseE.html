@@ -25,7 +25,7 @@
 	        </a>
 	        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
 	          <a class="dropdown-item" href="{% url 'settingsC' %}">{{request.session.userId}} </a>
-	          <a class="dropdown-item" href="#">Orders</a>
+	          <a class="dropdown-item" href="{% url 'orderHistoryE' %}">Orders</a>
 	          <div class="dropdown-divider"></div>
 	          <a class="dropdown-item" href="{% url 'logoutC' %}">Log Out</a>
 	        </div>

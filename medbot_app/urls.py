@@ -13,5 +13,10 @@ urlpatterns = [
     path('Pharmacy', views.loginE, name='pharmacypage'),
     path('added/<list_id>', views.add_cart, name='add'),
     path('Cart', views.cart, name= 'cart'),
-    path('user', views.customerPortal, name='customerx')
+    path('user', views.customerPortal, name='customerx'),
+    path('Checkout', views.checkoutOrder, name='checkoutC'),
+    path('Add-item', views.addItemA, name='addItemA'),
+    path('Order-History', views.orderHistoryE, name='orderHistoryE'),
+    path('Order', views.orderC, name= 'orderC'),
+    path('Order-History', views.orderHistoryC, name='orderHistoryC'),
 ]

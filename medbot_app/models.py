@@ -112,15 +112,33 @@ class Order(models.Model):
 		(DELIVERED, 'Medicine Delivered')
 	]
 
+	CASHONDELVRY = 'COD'
+	BKASH = 'BKS'
+	ROCKET = 'RKT'
+	CARD = 'CRD'
+	PAYPAL = 'PPL'
+
+	PAYMENTOPTIONS = [
+		(CASHONDELVRY, 'Cash On Delivery'),
+		(BKASH, 'Bkash'),
+		(ROCKET, 'Rocket'),
+		(CARD, 'ATM Card'),
+		(PAYPAL, 'PayPal')
+	]
+
 	order_id = models.BigAutoField(primary_key = True)
 	order_date = models.DateTimeField(auto_now_add=True)
-	pharmacy_id = models.ForeignKey(Employee, on_delete = models.CASCADE)
+	pharmacy_id = models.ManyToManyField(Employee)
 	customer_id = models.ForeignKey(Customer, on_delete = models.CASCADE)
 	delivery_id = models.ForeignKey(Delivery, on_delete = models.CASCADE)
 	delivery_status = models.CharField(max_length = 3, choices = DELIVERYSTATUS, default = ONPROCESS)
 	rating = models.IntegerField()
 	order_quantity = models.IntegerField(default= 5)
 	med_ids = models.ManyToManyField(Inventory)
+	order_status = models.BooleanField(default=False)
+	order_type = models.CharField(max_length = 3, choices = PAYMENTOPTIONS, default = CASHONDELVRY)
+	delivery_note = models.CharField(max_length = 100, default = "Call me when you arrive")
+	order_cost = models.CharField(max_length = 10, default = "10")
 
 	def __str__(self):
 		return str(self.order_id)

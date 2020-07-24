@@ -1,0 +1,98 @@
+{% extends 'baseC.html' %}
+
+{% block title %}MedBot | Order{% endblock %}
+
+
+
+{% block content %}
+	{% if all %}
+	
+	<div class="table-responsive">
+		<table class="table table-striped table-dark">
+			{% for things in all %}
+				<tr>
+					<td>Name: {{ things.med_id }}</td>
+					<td><center>Shop: {{ things.pharmacy_id }}</center></td>
+					<td><center>Price: {{ things.med_id.med_price }}</td>
+					<td><center>Quantity: {{ things.adding_quantity }}</td>
+				
+			{% endfor %}
+				</tr>
+				<tr>
+					<td>Delivery cost: 10</td>
+					<td><center>Total cost: {{ price_of }}</td>	
+		</table>
+	</div>
+	<hr class="my-4">
+	<form action="{% url 'orderC' %}" method="POST">
+	  {% csrf_token %}
+<!-- 
+	showing delivery schedule
+	 -->
+	<div class="dropdown">
+		<select class="btn btn-warning btn-sm" id="inlineFormCustomSelect" name="deliveryTime">
+			<option value = "{{deliveryTime.0.DS_id}}" selected>{{ deliveryTime.0.DS_start_time }} - {{ deliveryTime.0.DS_stop_time }}</option>
+			{% for times in deliveryTime %}
+				<option value = "{{times.DS_id}}">{{times.DS_start_time}} - {{times.DS_stop_time}}</option>
+			{% endfor %}
+		</select>
+	</div>
+<!-- 
+	showing delivery notes
+ -->
+ 	<hr class="my-4">
+ 	<div class="input-group flex-nowrap">
+	  <div class="input-group-prepend">
+	    <span class="input-group-text" id="addon-wrapping">Delivery Note</span>
+	  </div>
+	  <input type="text" class="form-control" value="Call Me When You arrive" aria-label="delivery note" aria-describedby="addon-wrapping" name="deliveryNote">
+	</div>
+	<hr class="my-4">
+<!-- 
+	showing promo code
+ -->
+	  <div class="form-group mb-2">
+	    <label for="staticEmail2" class="sr-only">Promo Code</label>
+	    <input type="text" readonly class="form-control-plaintext" id="staticEmail2" value="Add a valid promo code">
+	  </div>
+	  <div class="form-group mx-sm-3 mb-2">
+	    <label for="inputPassword2" class="sr-only">Promo Code</label>
+	    <input type="text" class="form-control" id="inputPassword2" placeholder="valid promo code" readonly>
+	  </div>
+	  <!-- <button type="submit" class="btn btn-primary mb-2">Confirm promo code</button> -->
+<!-- 
+	 showing Payment Options
+ -->
+	<hr class="my-4">
+	<label>Payment Options</label>
+	<div class="form-check">
+	  <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1" checked>
+	  <label class="form-check-label" for="exampleRadios1">
+	    Cash on Delivery
+	  </label>
+	</div>
+	<div class="form-check">
+	  <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="option2" disabled>
+	  <label class="form-check-label" for="exampleRadios2">
+	    Bkash
+	  </label>
+	</div>
+	<small id="passwordHelpInline" class="text-muted">
+      Not availabe now
+    </small>
+	<div class="form-check">
+	  <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios3" value="option3" disabled>
+	  <label class="form-check-label" for="exampleRadios3">
+	    Rocket
+	  </label>
+	</div>
+	<small id="passwordHelpInline" class="text-muted">
+      Not availabe now
+    </small>
+	{% endif %}
+		<div>
+			<button  type="submit" class="btn btn-success">Confirm Order</button>
+		</div>
+	</form>
+
+{% endblock %}

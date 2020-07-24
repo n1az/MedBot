@@ -1,23 +1,34 @@
 {% extends 'baseC.html' %}
 
-{% block title %}MedBot | Home{% endblock %}
+{% block title %}MedBot | Cart{% endblock %}
 
 
 
 {% block content %}
-
 	{% if all %}
+	
 	<div class="table-responsive">
-		<table class="table table-dark">
+		<table class="table table-striped table-dark">
 			{% for things in all %}
 				<tr>
-					<td>{{ things.med_id }}</td>
-					<td><center>{{ things.pharmacy_id }}</center></td>
-					<td><center>{{ things.customer_id }}</td>
-					
+					<td>Name: {{ things.med_id }}</td>
+					<td><center>Shop: {{ things.pharmacy_id }}</center></td>
+					<td><center>Price: {{ things.med_id.med_price }}</td>
+					<td><center>Quantity: {{ things.adding_quantity }}</td>
+				
 			{% endfor %}
+				</tr>
+				<tr>
+					<td>Delivery cost: 10</td>
+					<td><center>Total cost: {{ price_of }}</td>	
 		</table>
 	</div>
 	{% endif %}
+	<form action="{% url 'checkoutC' %}" method="POST">
+	  {% csrf_token %}
+		<div>
+			<button  type="submit" class="btn btn-success">Checkout</button>
+		</div>
+	</form>
 
 {% endblock %}
