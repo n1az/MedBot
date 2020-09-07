@@ -12,6 +12,8 @@ class Employee(models.Model):
 	pharmacy_rating_count = models.PositiveIntegerField(default = 0)
 	employee_email = models.EmailField(max_length = 254)
 	employee_phone = models.CharField(max_length = 15)
+	employee_longT = models.CharField(max_length = 20, default= "90.40")
+	employee_latiT = models.CharField(max_length = 20, default= "20.40")
 
 	def __str__(self):
 		return self.pharmacy_name
@@ -87,6 +89,8 @@ class Customer(models.Model):
 	customer_password = models.CharField(max_length = 100)
 	customer_email = models.EmailField(max_length = 254)
 	customer_phone = models.CharField(max_length = 15)
+	customer_longT = models.CharField(max_length = 20, default= "90.40")
+	customer_latiT = models.CharField(max_length = 20, default= "20.40")
 
 	def __str__(self):
 		return self.customer_name
@@ -139,6 +143,8 @@ class Order(models.Model):
 	order_type = models.CharField(max_length = 3, choices = PAYMENTOPTIONS, default = CASHONDELVRY)
 	delivery_note = models.CharField(max_length = 100, default = "Call me when you arrive")
 	order_cost = models.CharField(max_length = 10, default = "10")
+	order_longT = models.CharField(max_length = 20, default= "90.40")
+	order_latiT = models.CharField(max_length = 20, default= "20.40")
 
 	def __str__(self):
 		return str(self.order_id)

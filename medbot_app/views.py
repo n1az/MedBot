@@ -46,6 +46,7 @@ def loginCustomer(request):
 			userX = Customer.objects.get(customer_email = username)
 			if password == userX.customer_password:
 				request.session['userId'] = userX.customer_id
+				request.session['username'] = userX.customer_name
 				request.session.set_expiry(3000)
 				return render(request, 'customer.html', context)
 			else:
@@ -54,6 +55,7 @@ def loginCustomer(request):
 			userE = Employee.objects.get(employee_email = username)
 			if password == userE.employee_password:
 				request.session['userId'] = userE.pharmacy_id
+				request.session['username'] = userE.owner_name
 				request.session.set_expiry(3000)
 				response = redirect('pharmacypage')
 				return response
@@ -63,6 +65,7 @@ def loginCustomer(request):
 			userA = Admin.objects.get(admin_email = username)
 			if password == userA.admin_password:
 				request.session['userId'] = userA.admin_id
+				request.session['username'] = userA.admin_name
 				request.session.set_expiry(3000)
 				response = redirect('adminpage')
 				return response
@@ -111,20 +114,15 @@ def registerC(request):
 		customerYear = request.POST['year']
 		customerMonth = request.POST['month']
 		customerDay = request.POST['day']
-		objX = Customer(customer_name = customerName, birthdate = ''+customerYear+'-'+customerMonth+'-'+customerDay+'', customer_address = customerAddress, customer_password = customerPassword, customer_email = customerEmail, customer_phone = customerPhone)
+		customerlongT = request.POST['userLongT']
+		customerlatiT = request.POST['userLatiT']
+		objX = Customer(customer_name = customerName, birthdate = ''+customerYear+'-'+customerMonth+'-'+customerDay+'', customer_address = customerAddress, customer_password = customerPassword, customer_email = customerEmail, customer_phone = customerPhone, customer_longT = customerlongT, customer_latiT = customerlatiT)
 		objX.save()
 		response = redirect('loginC')
 		return response
 	else:
 		return render(request, 'register.html', {})
 
-def createUser(request):
-	if request.method == "POST":
-		username = request.POST['username']
-		email = request.POST['email']
-		password = request.POST['password']
-		address = request.POST['address']
-		return HttpResponse("ok")
 
 def settingsC(request):
 	return render(request, 'settingsC.html', {})
@@ -193,7 +191,9 @@ def orderC(request):
 			# deliveryTime = deliverTime.split("-")
 			# startTime = datetime.strptime(deliveryTime[0], '%I:%M%p')
 			# stopTime = datetime.strptime(deliveryTime[1], '%I:%M%p')
-			objX = Order( customer_id=  obj[0].customer_id, delivery_id= Delivery.objects.get(DS_id = deliverTime), rating= 0, order_quantity= itemQuantity, delivery_note= deliverNote, order_cost = all_cost)
+			orderlongT = request.POST['userLongT']
+			orderlatiT = request.POST['userLatiT']
+			objX = Order( customer_id=  obj[0].customer_id, delivery_id= Delivery.objects.get(DS_id = deliverTime), rating= 0, order_quantity= itemQuantity, delivery_note= deliverNote, order_cost = all_cost, order_longT = orderlongT, order_latiT = orderlatiT)
 			objX.save()
 			for med in obj:
 				objX.med_ids.add(med.med_id)

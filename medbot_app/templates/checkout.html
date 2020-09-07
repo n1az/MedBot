@@ -101,127 +101,72 @@
 		<script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.min.js"></script>
 		<script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.auto.min.js"></script>
 	    <div id='map' style='width: 500px; height: 300px;'></div>
-		<pre id="coordinates" class="coordinates"></pre>
+		<pre id="coordinatesx" class="coordinates"></pre>
+		<pre id="coordinatesy" class="coordinates"></pre>
+		<style>
+			#fly {
+			display: block;
+			color: #fff;
+			background: #ee8a65;
+			}
+		</style>
+		<br>
+		<button id="fly" type="button" class="btn btn-success my-4" onclick="lockLoc()">Lock your pickUP point</button>
+		<input type="text" id="longX" name="userLongT" class="userLocation" style="display: none;">
+		<input type="text" id="latiY" name="userLatiT" class="userLocation" style="display: none;">
+
 			<script>
 				mapboxgl.accessToken = 'pk.eyJ1IjoibWRuaWF6bW9yc2hlZCIsImEiOiJja2NjMWg4amwwMGF3MnJyMHhhdXM5b2trIn0.h5Dbq_k3fdlRuZlaXuaHMw';
-				var map = new mapboxgl.Map({
-				container: 'map',
-				style: 'mapbox://styles/mapbox/streets-v11',
-				center: [90.43, 23.82],
-				zoom: 13
-				});
-
-				map.addControl(
-				new MapboxGeocoder({
-				accessToken: mapboxgl.accessToken,
-				mapboxgl: mapboxgl
-				})
-				);
-				// Add geolocate control to the map.
 				
-				var geolocate = new mapboxgl.GeolocateControl({
-				positionOptions: {
-				enableHighAccuracy: true
-				},
-				trackUserLocation: true
+				navigator.geolocation.getCurrentPosition(function(position) {
+				  var lon = position.coords.longitude;
+				  var lat = position.coords.latitude;
+
+					var map = new mapboxgl.Map({
+					container: 'map',
+					style: 'mapbox://styles/mapbox/outdoors-v11',
+					center: [lon, lat],
+					zoom: 16
+					});
+
+					
+					map.addControl(new mapboxgl.NavigationControl());
+					
+					var marker = new mapboxgl.Marker({
+						draggable: true
+					})
+						.setLngLat([lon, lat])
+						.addTo(map);
+							 
+					function onDragEnd() {
+						var lngLat = marker.getLngLat();
+						coordinatesx.style.display = 'none';
+						coordinatesy.style.display = 'none';
+						coordinatesx.innerHTML = lngLat.lng;
+						coordinatesy.innerHTML = lngLat.lat;
+					}
+					
+							 
+					marker.on('dragend', onDragEnd);
+
 				});
-				map.addControl(geolocate);
-				map.addControl(new mapboxgl.NavigationControl());
-				map.on('load', function() {
-					geolocate.trigger();
-				});
-				var cords = JSON.stringify(Geolocation.getCurrentPosition());
-				console.alert(cords)
-				var canvas = map.getCanvasContainer();
-    
-			    var geojson = {
-			        'type': 'FeatureCollection',
-			        'features': [
-			            {
-			                'type': 'Feature',
-			                'geometry': {
-			                    'type': 'Point',
-			                    'coordinates': [90.43,23.82]
-			                }
-			            }
-			        ]
-			    };
-
-			    function onMove(e) {
-			        var coords = e.lngLat;
-
-			        // Set a UI indicator for dragging.
-			        canvas.style.cursor = 'grabbing';
-
-			        // Update the Point feature in `geojson` coordinates
-			        // and call setData to the source layer `point` on it.
-			        geojson.features[0].geometry.coordinates = [coords.lng, coords.lat];
-			        map.getSource('point').setData(geojson);
-			    }
-
-			    function onUp(e) {
-			        var coords = e.lngLat;
-
-			        // Print the coordinates of where the point had
-			        // finished being dragged to on the map.
-			        coordinates.style.display = 'block';
-			        coordinates.innerHTML =
-			            'Longitude: ' + coords.lng + '<br />Latitude: ' + coords.lat;
-			        canvas.style.cursor = '';
-
-			        // Unbind mouse/touch events
-			        map.off('mousemove', onMove);
-			        map.off('touchmove', onMove);
-			    }
-
-			    map.on('load', function() {
-			        // Add a single point to the map
-			        map.addSource('point', {
-			            'type': 'geojson',
-			            'data': geojson
-			        });
-
-			        map.addLayer({
-			            'id': 'point',
-			            'type': 'circle',
-			            'source': 'point',
-			            'paint': {
-			                'circle-radius': 10,
-			                'circle-color': '#00897B'
-			            }
-			        });
-
-			        // When the cursor enters a feature in the point layer, prepare for dragging.
-			        map.on('mouseenter', 'point', function() {
-			            map.setPaintProperty('point', 'circle-color', '#3bb2d0');
-			            canvas.style.cursor = 'move';
-			        });
-
-			        map.on('mouseleave', 'point', function() {
-			            map.setPaintProperty('point', 'circle-color', '#00897B');
-			            canvas.style.cursor = '';
-			        });
-
-			        map.on('mousedown', 'point', function(e) {
-			            // Prevent the default map drag behavior.
-			            e.preventDefault();
-
-			            canvas.style.cursor = 'grab';
-
-			            map.on('mousemove', onMove);
-			            map.once('mouseup', onUp);
-			        });
-
-			        map.on('touchstart', 'point', function(e) {
-			            if (e.points.length !== 1) return;
-
-			            // Prevent the default map drag behavior.
-			            e.preventDefault();
-
-			            map.on('touchmove', onMove);
-			            map.once('touchend', onUp);
-			        });
-			    });
+				
+				function lockLoc() {
+					var lastLongT = document.getElementById("coordinatesx").innerHTML;
+					var lastLatiT = document.getElementById("coordinatesy").innerHTML;
+					document.getElementById("longX").value = lastLongT;
+					document.getElementById("latiY").value = lastLatiT;
+					if(document.getElementById("longX").value == "") {
+						alert("Please select your pickup point");
+					}
+					else {
+						alert("Your pickup point has been locked Successfully");
+						document.getElementById("orderOK").disabled = false;
+					}
+				}
+				
+				
+				
 
 				
 
@@ -230,7 +175,7 @@
 
 	{% endif %}
 		<div>
-			<button  type="submit" class="btn btn-success my-4">Confirm Order</button>
+			<button  type="submit" id="orderOK" class="btn btn-success my-4" disabled="true">Confirm Order</button>
 		</div>
 	</form>
 

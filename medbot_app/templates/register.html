@@ -46,9 +46,89 @@
 		    <input type="text" class="form-control" placeholder="Day" name="day">
 		  </div>
 		</div>
-		<div class="form-row">
+		<br>
+		<div class="container">
+	  	<h5>Place the marker on your Location</h5>
+	  	<script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.5.1/mapbox-gl-geocoder.min.js"></script>
+		<link
+		rel="stylesheet"
+		href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.5.1/mapbox-gl-geocoder.css"
+		type="text/css"
+		/>
+		<!-- Promise polyfill script required to use Mapbox GL Geocoder in IE 11 -->
+		<script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.auto.min.js"></script>
+	    <div id='map' style='width: 500px; height: 300px;'></div>
+		<pre id="coordinatesx" class="coordinates"></pre>
+		<pre id="coordinatesy" class="coordinates"></pre>
+		<style>
+			#fly {
+			display: block;
+			color: #fff;
+			background: #ee8a65;
+			}
+		</style>
+		<br>
+		<button id="fly" type="button" class="btn btn-success my-4" onclick="lockLoc()">Lock your Location</button>
+		<input type="text" id="longX" name="userLongT" class="userLocation" style="display: none;">
+		<input type="text" id="latiY" name="userLatiT" class="userLocation" style="display: none;">
+
+			<script>
+				mapboxgl.accessToken = 'pk.eyJ1IjoibWRuaWF6bW9yc2hlZCIsImEiOiJja2NjMWg4amwwMGF3MnJyMHhhdXM5b2trIn0.h5Dbq_k3fdlRuZlaXuaHMw';
+				
+				navigator.geolocation.getCurrentPosition(function(position) {
+				  var lon = position.coords.longitude;
+				  var lat = position.coords.latitude;
+
+					var map = new mapboxgl.Map({
+					container: 'map',
+					style: 'mapbox://styles/mapbox/outdoors-v11',
+					center: [lon, lat],
+					zoom: 16
+					});
+
+					
+					
+					map.addControl(new mapboxgl.NavigationControl());
+					
+					var marker = new mapboxgl.Marker({
+						draggable: true
+					})
+						.setLngLat([lon, lat])
+						.addTo(map);
+							 
+					function onDragEnd() {
+						var lngLat = marker.getLngLat();
+						coordinatesx.style.display = 'none';
+						coordinatesy.style.display = 'none';
+						coordinatesx.innerHTML = lngLat.lng;
+						coordinatesy.innerHTML = lngLat.lat;
+					}
+					
+							 
+					marker.on('dragend', onDragEnd);
+
+				});
+				
+				function lockLoc() {
+					var lastLongT = document.getElementById("coordinatesx").innerHTML;
+					var lastLatiT = document.getElementById("coordinatesy").innerHTML;
+					document.getElementById("longX").value = lastLongT;
+					document.getElementById("latiY").value = lastLatiT;
+					if(document.getElementById("longX").value == "") {
+						alert("Please select your pickup point");
+					}
+					else {
+						alert("Your pickup point has been locked Successfully");
+						document.getElementById("registerOK").disabled = false;
+					}
+				}
+
+			</script>
+	  </div>
+	  <div class="form-row">
 			<div class="col-auto">
-				<button type="submit" class="btn btn-primary my-4">Sign up</button>
+				<button type="submit" id="registerOK" disabled="true" class="btn btn-primary my-4">Sign up</button>
 			</div>
 		</div>
 	</form>

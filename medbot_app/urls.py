@@ -16,7 +16,7 @@ urlpatterns = [
     path('user', views.customerPortal, name='customerx'),
     path('Checkout', views.checkoutOrder, name='checkoutC'),
     path('Add-item', views.addItemA, name='addItemA'),
-    path('Order-History', views.orderHistoryE, name='orderHistoryE'),
+    path('Pharmacy-Order-History', views.orderHistoryE, name='orderHistoryE'),
     path('Order', views.orderC, name= 'orderC'),
-    path('Order-History', views.orderHistoryC, name='orderHistoryC'),
+    path('User-Order-History', views.orderHistoryC, name='orderHistoryC'),
 ]
