@@ -19,4 +19,5 @@ urlpatterns = [
     path('Pharmacy-Order-History', views.orderHistoryE, name='orderHistoryE'),
     path('Order', views.orderC, name= 'orderC'),
     path('User-Order-History', views.orderHistoryC, name='orderHistoryC'),
+    path('Optimized-Route', views.opRouteE, name='opRouteE'),
 ]

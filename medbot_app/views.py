@@ -5,6 +5,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate
 from datetime import datetime
 from django.db.models import Q
+from django.core import serializers
 
 def home(request):
 	if request.method == "POST":
@@ -210,3 +211,15 @@ def orderHistoryC(request):
 		obj = Order.objects.filter(customer_id = request.session['userId'])
 		context = {'all': obj}
 		return render(request, 'orderHistoryC.html', context)
+
+def opRouteE(request):
+	if request.session.is_empty():
+		return redirect('loginC')
+	else:
+		ob = Order.objects.filter(pharmacy_id = request.session['userId'])
+		# for item in ob:
+		# 	item['order'] = model_to_dict(item['order'])
+		obj = serializers.serialize('json',ob)
+		objx = Employee.objects.filter(pharmacy_id = request.session['userId'])
+		context = {'all': obj, 'pharmacyLongT': objx[0].employee_longT, 'pharmacyLatiT': objx[0].employee_latiT}
+		return render(request, 'opRouteE.html', context)
