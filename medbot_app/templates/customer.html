@@ -4,26 +4,39 @@
 
 
 {% block content %}
+{% if messages %}
+	{% for message in messages %}
+		<div class="alert alert-warning alert-dismissible fade show" role="alert">
+		  <strong>Holy guacamole! </strong> {{ message}}
+		  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+		    <span aria-hidden="true">&times;</span>
+		  </button>
+		</div>
+	{% endfor %}
+{% endif %}
 
 	{% if all %}
 	<div class="table-responsive">
 		<table class="table table-striped table-dark">
 			{% for things in all %}
+			<form action="{% url 'add' things.med_id %}" method="GET">
+				{% csrf_token %}
 				<tr>
 					<td>{{ things.med_name }}</td>
 					<td><center>{{ things.med_generic }}</center></td>
 					<td><center>{{ things.med_price }}</td>
 					<td><center>
 						<div class="dropdown">
-						    <select class="btn btn-warning btn-sm" id="inlineFormCustomSelect">
-					        <option selected>5</option>
-					        <option value="1">10</option>
-					        <option value="2">15</option>
-					        <option value="3">20</option>
+						    <select class="btn btn-warning btn-sm" id="inlineFormCustomSelect" name="quantity">
+					        <option value="5"selected>5</option>
+					        <option value="10">10</option>
+					        <option value="15">15</option>
+					        <option value="20">20</option>
 					        </select>
 						</div>
-					<td><center><a href="{% url 'add' things.med_id %}" class="btn btn-outline-success btn-sm">Add to Cart</a></center></td>
+					<td><center><button type="submit" class="btn btn-outline-success btn-sm">Add to Cart</button></center></td>
 				</tr>
+			</form>
 			{% endfor %}
 		</table>
 	</div>

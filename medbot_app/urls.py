@@ -20,4 +20,5 @@ urlpatterns = [
     path('Order', views.orderC, name= 'orderC'),
     path('User-Order-History', views.orderHistoryC, name='orderHistoryC'),
     path('Optimized-Route', views.opRouteE, name='opRouteE'),
+    path('Profile-Saved', views.profileC, name='profileC'),
 ]

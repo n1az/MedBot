@@ -126,17 +126,24 @@ def registerC(request):
 
 
 def settingsC(request):
-	return render(request, 'settingsC.html', {})
+	if request.session.is_empty():
+		return redirect('loginC')
+	else:
+		obj = Customer.objects.filter(customer_id = request.session['userId'])
+		context = {'all': obj, }
+		return render(request, 'settingsC.html', context)
+	
 
 def add_cart(request, list_id):
 	if request.session.is_empty():
 		return redirect('loginC')
 	else:
+		quantity = request.GET['quantity']
 		obj = Inventory.objects.get(med_id = list_id)
-		objC = Cart(pharmacy_id = obj.pharmacy_id, customer_id =  Customer.objects.get(customer_id = request.session['userId']), adding_quantity = 5, med_id = obj)
+		objC = Cart(pharmacy_id = obj.pharmacy_id, customer_id =  Customer.objects.get(customer_id = request.session['userId']), adding_quantity = quantity, med_id = obj)
 		objC.save()
 		messages.success(request, ('Item added to the cart'))
-		return redirect('home')
+		return redirect('loginCustomer')
 
 def cart(request):
 	if request.session.is_empty():
@@ -223,3 +230,43 @@ def opRouteE(request):
 		objx = Employee.objects.filter(pharmacy_id = request.session['userId'])
 		context = {'all': obj, 'pharmacyLongT': objx[0].employee_longT, 'pharmacyLatiT': objx[0].employee_latiT}
 		return render(request, 'opRouteE.html', context)
+
+def profileC(request):
+	if request.session.is_empty():
+		return redirect('loginC')
+	else:
+		counter = 0
+		ob = Customer.objects.get(customer_id = request.session['userId'])
+		if request.method == "POST":
+			name = request.POST['username']
+			email = request.POST['email']
+			phone = request.POST['phone']
+			cpass = request.POST['cpassword']
+			npass = request.POST['npassword']
+			address = request.POST['address']
+			if len(npass) > 1:
+				if cpass == ob.customer_password:
+					ob.customer_password = npass
+					counter+=1
+				else:
+					messages.success(request, ('Current Password is wrong'))
+					return redirect('settingsC')
+			if name != ob.customer_name:
+				ob.customer_name = name
+				counter+=1
+			if email != ob.customer_email:
+				ob.customer_email = email
+				counter+=1
+			if phone != ob.customer_phone:
+				ob.customer_phone = phone
+				counter+=1
+			if address != ob.customer_address:
+				ob.customer_address = address
+				counter+=1
+		if counter > 0:
+			ob.save()
+			messages.success(request, ('Profile Changes has been Saved Successfully'))
+			return redirect('loginCustomer')
+		else:
+			return redirect('loginCustomer')
+

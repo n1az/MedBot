@@ -31,14 +31,14 @@
 					<td><center>{{ things.med_price }}</td>
 					<td><center>
 						<div class="dropdown">
-						    <select class="btn btn-warning btn-sm" id="inlineFormCustomSelect">
-					        <option selected>5</option>
-					        <option value="1">10</option>
-					        <option value="2">15</option>
-					        <option value="3">20</option>
+						    <select class="btn btn-warning btn-sm" id="inlineFormCustomSelect" name="quantity">
+					        <option value="5"selected>5</option>
+					        <option value="10">10</option>
+					        <option value="15">15</option>
+					        <option value="20">20</option>
 					        </select>
 						</div>
-					<td><center><a href="{% url 'add' things.med_id %}" class="btn btn-outline-success btn-sm">Add to Cart</a></center></td>
+					<td><center><button type="submit" onclick ="{% url 'add' things.med_id %}" class="btn btn-outline-success btn-sm">Add to Cart</button></center></td>
 				</tr>
 			{% endfor %}
 		</table>
