@@ -145,6 +145,28 @@ def add_cart(request, list_id):
 		messages.success(request, ('Item added to the cart'))
 		return redirect('loginCustomer')
 
+def remv_cart(request, list_id):
+	if request.session.is_empty():
+		return redirect('loginC')
+	else:
+		Cart.objects.filter(cart_id = list_id).delete()
+		messages.success(request, ('Item removed from the cart'))
+		return redirect('cart')
+
+def catagorize(request, foo):
+	obj = Inventory.objects.filter(med_catagory = foo)
+	context = { 'all': obj, }
+	return render(request, 'catagorize.html',context)
+
+def catagorizeC(request, food):
+	if request.session.is_empty():
+		return redirect('loginC')
+	else:
+		obj = Inventory.objects.filter(med_catagory = food)
+		context = { 'all': obj, }
+		return render(request, 'catagorize.html',context)
+
+
 def cart(request):
 	if request.session.is_empty():
 		return redirect('loginC')
@@ -152,7 +174,8 @@ def cart(request):
 		obj = Cart.objects.filter(customer_id = request.session['userId'])
 		all_cost = 10
 		for k in obj:
-			all_cost = k.med_id.med_price + all_cost
+			tl_cost = k.med_id.med_price * k.adding_quantity
+			all_cost = tl_cost + all_cost
 		context = {'all': obj, 'price_of': all_cost}
 		return render(request, 'cart.html', context)
 
@@ -270,3 +293,8 @@ def profileC(request):
 		else:
 			return redirect('loginCustomer')
 
+def prescript(request):
+	if request.session.is_empty():
+		return redirect('loginC')
+	else:
+		return render(request, 'prescript.html', {})

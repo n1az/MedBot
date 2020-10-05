@@ -29,14 +29,28 @@
 	          Catagories
 	        </a>
 	        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-	          <a class="dropdown-item" href="#">Most Popular</a>
-	          <a class="dropdown-item" href="#">Gastrology</a>
+	          <a class="dropdown-item" href="{% url 'catagorize' 'A' %}">General</a>
+	          <a class="dropdown-item" href="{% url 'catagorize' 'T' %}">Metabolic and Nutritional</a>
 	          <div class="dropdown-divider"></div>
-	          <a class="dropdown-item" href="#">Antibiotics</a>
+	          <a class="dropdown-item" href="{% url 'catagorize' 'B' %}">Blood</a>
+	          <a class="dropdown-item" href="{% url 'catagorize' 'D' %}">Digestive</a>
+	          <a class="dropdown-item" href="{% url 'catagorize' 'F' %}">Eye</a>
+	          <a class="dropdown-item" href="{% url 'catagorize' 'H' %}">Ear</a>
+	          <a class="dropdown-item" href="{% url 'catagorize' 'K' %}">Circulatory</a>
+	          <a class="dropdown-item" href="{% url 'catagorize' 'L' %}">Musculoskeletal</a>
+	          <a class="dropdown-item" href="{% url 'catagorize' 'N' %}">Neurological</a>
+	          <a class="dropdown-item" href="{% url 'catagorize' 'P' %}">Psychological</a>
+	          <a class="dropdown-item" href="{% url 'catagorize' 'R' %}">Respiratory</a>
+	          <a class="dropdown-item" href="{% url 'catagorize' 'S' %}">Skin</a><!-- 
+	          <a class="dropdown-item" href="#">Urology</a>
+	          <a class="dropdown-item" href="#">Pregnancy</a>
+	          <a class="dropdown-item" href="#">Femalegenital</a>
+	          <a class="dropdown-item" href="#">Malegenital</a>
+	          <a class="dropdown-item" href="#">Social problems</a> -->
 	        </div>
 	      </li>
 	      <li class="nav-item">
-        	<a class="nav-link" href="#" tabindex="-1">Upload Prescription</a>
+        	<a class="nav-link" href="{% url 'prescriptC' %}" tabindex="-1">Upload Prescription</a>
       	  </li>
       	  <li class="nav-item">
         	<a class="nav-link" href="{% url 'cart' %}" tabindex="-1">Cart</a>

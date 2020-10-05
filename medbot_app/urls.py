@@ -21,4 +21,8 @@ urlpatterns = [
     path('User-Order-History', views.orderHistoryC, name='orderHistoryC'),
     path('Optimized-Route', views.opRouteE, name='opRouteE'),
     path('Profile-Saved', views.profileC, name='profileC'),
+    path('catagories/<slug:foo>', views.catagorize, name= 'catagorize'),
+    path('catagor-ies/<slug:food>', views.catagorizeC, name= 'catagorizeC'),
+    path('removed/<list_id>', views.remv_cart, name='remv'),
+    path('Upload-Prescription', views.prescript, name='prescriptC'),
 ]

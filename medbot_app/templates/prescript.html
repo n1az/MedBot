@@ -1,0 +1,20 @@
+{% extends 'baseC.html' %}
+
+{% block title %}MedBot | Upload Prescription{% endblock %}
+
+
+
+{% block content %}
+	<div class="custom-file">
+	  <input type="file" class="custom-file-input" id="customFile">
+	  <label class="custom-file-label" for="customFile">Choose file</label>
+	</div>
+	<br><br><br>
+	<!-- <form action="{% url 'loginCustomer' %}" method="POST">
+	  {% csrf_token %} -->
+		<div>
+			<a href="{% url 'loginCustomer' %}" class="btn btn-success">Checkout</a>
+		</div>
+	<!-- </form> -->
+
+{% endblock %}
