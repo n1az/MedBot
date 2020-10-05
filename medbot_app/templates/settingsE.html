@@ -1,0 +1,54 @@
+{% extends 'baseE.html' %}
+
+{% block title %}MedBot | Profile{% endblock %}
+
+
+{% block content %}
+{% if messages %}
+	{% for message in messages %}
+		<div class="alert alert-warning alert-dismissible fade show" role="alert">
+		  <strong>Holy guacamole! </strong> {{ message}}
+		  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+		    <span aria-hidden="true">&times;</span>
+		  </button>
+		</div>
+	{% endfor %}
+{% endif %}
+
+{% if all %}
+	
+	<form action="{% url 'profileC' %}" method="POST">
+		{% csrf_token %}
+		<div class="form-row">
+		  <div class="form-group col-md-6">
+		    <label for="inputName">Full Name</label>
+		    <input type="text" class="form-control" id="inputCity" name="username" required="True" value="{{ all.0.owner_name }}">
+		  </div>
+		</div>
+		<div class="form-row">
+		  <div class="form-group col-md-6">
+		    <label for="inputEmail4">Email</label>
+		    <input type="email" class="form-control" id="inputEmail4" name="email" required="True" value="{{ all.0.employee_email }}">
+		  </div>
+		  
+		</div>
+		<div class="form-group">
+		  <label for="inputAddress">Address</label>
+		  <input type="text" class="form-control" id="inputAddress" placeholder="1234 Main St" name="address" required="True" value="{{ all.0.pharmacy_address }}">
+		</div>
+		<div class="form-row">
+		  <div class="form-group col-md-6">
+		    <label for="inputPhone">Phone</label>
+		    <input type="text" class="form-control" id="inputCity" name="phone" required="True" value="{{ all.0.employee_phone }}">
+		  </div>
+		</div>
+	  	<div class="form-row">
+		  <div class="form-group col-md-6">
+		    <label for="inputPhone">Pharmacy Name</label>
+		    <input type="text" class="form-control" id="inputCity" name="phone" required="True" value="{{ all.0.pharmacy_name }}">
+		  </div>
+		</div>
+	</form>
+{% endif %}
+
+{% endblock %}

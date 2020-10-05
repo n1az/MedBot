@@ -25,6 +25,24 @@ def home(request):
 def about(request):
 	return render(request, 'about.html', {})
 
+def aboutC(request):
+	if request.session.is_empty():
+		return redirect('loginC')
+	else:
+		return render(request, 'aboutC.html', {})
+
+def aboutE(request):
+	if request.session.is_empty():
+		return redirect('loginC')
+	else:
+		return render(request, 'aboutE.html', {})
+
+def aboutA(request):
+	if request.session.is_empty():
+		return redirect('loginC')
+	else:
+		return render(request, 'aboutA.html', {})
+
 def customerPortal(request):
 	obj = Inventory.objects.all()
 	context = {'all': obj}
@@ -132,6 +150,14 @@ def settingsC(request):
 		obj = Customer.objects.filter(customer_id = request.session['userId'])
 		context = {'all': obj, }
 		return render(request, 'settingsC.html', context)
+
+def settingsE(request):
+	if request.session.is_empty():
+		return redirect('loginC')
+	else:
+		obj = Employee.objects.filter(pharmacy_id = request.session['userId'])
+		context = {'all': obj, }
+		return render(request, 'settingsE.html', context)
 	
 
 def add_cart(request, list_id):
@@ -201,7 +227,7 @@ def orderHistoryE(request):
 	if request.session.is_empty():
 		return redirect('loginC')
 	else:
-		obj = Order.objects.filter(pharmacy_id = request.session['userId'])
+		obj = Order.objects.filter(pharmacy_id = request.session['userId'], delivery_status = 'OP')
 		context = {'all': obj}
 		return render(request, 'orderHistoryE.html', context)
 
@@ -246,7 +272,7 @@ def opRouteE(request):
 	if request.session.is_empty():
 		return redirect('loginC')
 	else:
-		ob = Order.objects.filter(pharmacy_id = request.session['userId'])
+		ob = Order.objects.filter(pharmacy_id = request.session['userId'], delivery_status= 'OP')
 		# for item in ob:
 		# 	item['order'] = model_to_dict(item['order'])
 		obj = serializers.serialize('json',ob)
@@ -298,3 +324,12 @@ def prescript(request):
 		return redirect('loginC')
 	else:
 		return render(request, 'prescript.html', {})
+
+def remvOrder(request, list_id):
+	if request.session.is_empty():
+		return redirect('loginC')
+	else:
+		obj = Order.objects.get(order_id = list_id)
+		obj.delivery_status = 'DV'
+		obj.save()
+		return redirect('orderHistoryE')

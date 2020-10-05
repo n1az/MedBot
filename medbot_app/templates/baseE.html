@@ -24,31 +24,14 @@
 	          Account
 	        </a>
 	        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-	          <a class="dropdown-item" href="#">{{request.session.username}} </a>
+	          <a class="dropdown-item" href="{% url 'settingsE' %}">{{request.session.username}} </a>
 	          <a class="dropdown-item" href="{% url 'orderHistoryE' %}">Orders</a>
 	          <div class="dropdown-divider"></div>
 	          <a class="dropdown-item" href="{% url 'logoutC' %}">Log Out</a>
 	        </div>
 	      </li>
-	      <li class="nav-item dropdown">
-	        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-	          Catagories
-	        </a>
-	        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-	          <a class="dropdown-item" href="#">Most Popular</a>
-	          <a class="dropdown-item" href="#">Gastrology</a>
-	          <div class="dropdown-divider"></div>
-	          <a class="dropdown-item" href="#">Antibiotics</a>
-	        </div>
-	      </li>
 	      <li class="nav-item">
-        	<a class="nav-link" href="#" tabindex="-1">Upload Prescription</a>
-      	  </li>
-      	  <li class="nav-item">
-        	<a class="nav-link" href="{% url 'cart' %}" tabindex="-1">Cart</a>
-      	  </li>
-	      <li class="nav-item">
-	        <a class="nav-link" href="{% url 'about' %}">About</a>
+	        <a class="nav-link" href="{% url 'aboutE' %}">About</a>
 	      </li>
 	    </ul>
 	    <form class="form-inline my-2 my-lg-0">

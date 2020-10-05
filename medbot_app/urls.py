@@ -4,6 +4,9 @@ from . import views
 urlpatterns = [
     path('', views.home, name='home'),
     path('about', views.about, name='about'),
+    path('about', views.about, name='aboutC'),
+    path('about', views.about, name='aboutE'),
+    path('about', views.about, name='aboutA'),
     path('login', views.loginC, name='loginC'),
     path('User', views.loginCustomer, name='loginCustomer'),
     path('logout', views.logoutC, name='logoutC'),
@@ -25,4 +28,6 @@ urlpatterns = [
     path('catagor-ies/<slug:food>', views.catagorizeC, name= 'catagorizeC'),
     path('removed/<list_id>', views.remv_cart, name='remv'),
     path('Upload-Prescription', views.prescript, name='prescriptC'),
+    path('Order-Delivered/<list_id>', views.remvOrder, name= 'remvOrder'),
+    path('Pharmacy-Profile', views.settingsE, name='settingsE'),
 ]
