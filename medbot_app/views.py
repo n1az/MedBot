@@ -111,6 +111,8 @@ def loginE(request):
 def loginA(request):
 	return render(request, 'admin.html', {})
 
+
+
 def logoutC(request):
 	try:
 		request.session.flush()
@@ -333,3 +335,16 @@ def remvOrder(request, list_id):
 		obj.delivery_status = 'DV'
 		obj.save()
 		return redirect('orderHistoryE')
+
+def orderDetails(request,list_id):
+	if request.session.is_empty():
+		return redirect('loginC')
+	else:
+		obj = Order.objects.filter(order_id = list_id)
+		objx = obj[0].order_carts.all()
+		all_cost = 10
+		for k in objx.all():
+			tl_cost = k.med_id.med_price * k.adding_quantity
+			all_cost = tl_cost + all_cost
+		context = {'all': objx, 'price_of': all_cost, 'allx': obj}
+		return render(request, 'orderDetails.html', context)

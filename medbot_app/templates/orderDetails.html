@@ -1,0 +1,34 @@
+{% extends 'baseE.html' %}
+
+{% block title %}MedBot | Pharmacy-Order-Detailes{% endblock %}
+
+
+{% block content %}
+{% for iter in allx %}
+	<form action="{% url 'remvOrder' iter.order_id %}" method="GET">
+{% endfor %}
+		{% csrf_token %}
+			{% if all %}
+	
+	<div class="table-responsive">
+		<table class="table table-striped table-dark">
+				{% for things in all %}
+				<tr>
+					<td>Name: {{ things.med_id }}</td>
+					<td><center>Shop: {{ things.pharmacy_id }}</center></td>
+					<td><center>Price: {{ things.med_id.med_price }}</td>
+					<td><center>Quantity: {{ things.adding_quantity }}</td>
+			</form>
+				{% endfor %}
+				</tr>
+				<tr>
+					<td>Delivery cost: 10</td>
+					<td><center>Total cost: {{ price_of }}</td>	
+		</table>
+	</div>
+
+			{% endif %}
+		<td><center><button type="submit" class="btn btn-outline-success btn-sm">Order Delivered</button></center></td>
+	</form>
+
+{% endblock %}

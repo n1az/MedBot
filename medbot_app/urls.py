@@ -30,4 +30,5 @@ urlpatterns = [
     path('Upload-Prescription', views.prescript, name='prescriptC'),
     path('Order-Delivered/<list_id>', views.remvOrder, name= 'remvOrder'),
     path('Pharmacy-Profile', views.settingsE, name='settingsE'),
+    path('Order-Details/<list_id>', views.orderDetails, name='orderDetails'),
 ]
