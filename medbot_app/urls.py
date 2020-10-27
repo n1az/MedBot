@@ -31,4 +31,5 @@ urlpatterns = [
     path('Order-Delivered/<list_id>', views.remvOrder, name= 'remvOrder'),
     path('Pharmacy-Profile', views.settingsE, name='settingsE'),
     path('Order-Details/<list_id>', views.orderDetails, name='orderDetails'),
+    path('Order-Details-Customer/<list_id>', views.orderDetailsC, name='orderDetailsC'),
 ]

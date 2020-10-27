@@ -214,7 +214,8 @@ def checkoutOrder(request):
 		obj = Cart.objects.filter(customer_id = request.session['userId'])
 		all_cost = 10
 		for k in obj:
-			all_cost = k.med_id.med_price + all_cost
+			tl_cost = k.med_id.med_price * k.adding_quantity
+			all_cost = tl_cost + all_cost
 		objD = Delivery.objects.filter(DS_status = True)
 		context = {'all': obj, 'price_of': all_cost, 'deliveryTime': objD}
 		return render(request, 'checkout.html', context)
@@ -244,7 +245,8 @@ def orderC(request):
 			all_cost = 10
 			itemQuantity = 0
 			for k in obj:
-				all_cost = k.med_id.med_price + all_cost
+				tl_cost = k.med_id.med_price * k.adding_quantity
+				all_cost = tl_cost + all_cost
 			for i in obj:
 				itemQuantity += 1
 			# deliveryTime = deliverTime.split("-")
@@ -258,16 +260,20 @@ def orderC(request):
 				objX.med_ids.add(med.med_id)
 			for shops in obj:
 				objX.pharmacy_id.add(shops.pharmacy_id)
+			for crts in obj:
+				objX.order_carts.add(crts.cart_id)
 			
 			messages.success(request, ('Order is processing, check order status in orders option on your account'))
-			return redirect('home')
+			return redirect('loginCustomer')
 
 def orderHistoryC(request):
 	if request.session.is_empty():
 		return redirect('loginC')
 	else:
-		obj = Order.objects.filter(customer_id = request.session['userId'])
-		context = {'all': obj}
+		obj = Order.objects.filter(customer_id = request.session['userId'], delivery_status= 'OP')
+		objx = Order.objects.filter(customer_id = request.session['userId'], delivery_status= 'OTW')
+		objy = Order.objects.filter(customer_id = request.session['userId'], delivery_status= 'DV')
+		context = {'op': obj, 'otw': objx, 'dv': objy}
 		return render(request, 'orderHistoryC.html', context)
 
 def opRouteE(request):
@@ -348,3 +354,16 @@ def orderDetails(request,list_id):
 			all_cost = tl_cost + all_cost
 		context = {'all': objx, 'price_of': all_cost, 'allx': obj}
 		return render(request, 'orderDetails.html', context)
+
+def orderDetailsC(request,list_id):
+	if request.session.is_empty():
+		return redirect('loginC')
+	else:
+		obj = Order.objects.filter(order_id = list_id)
+		objx = obj[0].order_carts.all()
+		all_cost = 10
+		for k in objx.all():
+			tl_cost = k.med_id.med_price * k.adding_quantity
+			all_cost = tl_cost + all_cost
+		context = {'all': objx, 'price_of': all_cost, 'allx': obj}
+		return render(request, 'orderDetailsC.html', context)
