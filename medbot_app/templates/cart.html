@@ -2,7 +2,16 @@
 
 {% block title %}MedBot | Cart{% endblock %}
 
-
+{% if messages %}
+	{% for message in messages %}
+		<div class="alert alert-warning alert-dismissible fade show" role="alert">
+		  <strong>Holy guacamole! </strong> {{ message}}
+		  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+		    <span aria-hidden="true">&times;</span>
+		  </button>
+		</div>
+	{% endfor %}
+{% endif %}
 
 {% block content %}
 	{% if all %}
@@ -17,7 +26,9 @@
 					<td><center>Shop: {{ things.pharmacy_id }}</center></td>
 					<td><center>Price: {{ things.med_id.med_price }}</td>
 					<td><center>Quantity: {{ things.adding_quantity }}</td>
-					<td><center><button type="submit" class="btn btn-outline-success btn-sm">Remove</button></center></td>
+					<td><center><a name="minus" class="btn btn-outline-warning btn-sm" href="{% url 'minusCart' things.cart_id %}">-</a></center></td>
+					<td><center><button type="submit" name="remov" class="btn btn-outline-success btn-sm">Remove</button></center></td>
+					<td><center><a name="addup" class="btn btn-outline-warning btn-sm" href="{% url 'addupCart' things.cart_id %}">+</a></center></td>
 			</form>
 			{% endfor %}
 				</tr>

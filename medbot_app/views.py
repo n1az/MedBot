@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Inventory, Customer, Admin, Employee, Cart, Order, Delivery
+from .models import Inventory, Customer, Admin, Employee, Cart, Order, Delivery, OrderedCart
 from django.http import HttpResponse
 from django.contrib import messages
 from django.contrib.auth import authenticate
@@ -44,9 +44,19 @@ def aboutA(request):
 		return render(request, 'aboutA.html', {})
 
 def customerPortal(request):
-	obj = Inventory.objects.all()
-	context = {'all': obj}
-	return render(request, 'customer.html', context)
+	if request.method == "POST":
+		medname = request.POST['search']
+		obj = Inventory.objects.filter(Q (med_name__icontains = medname) | Q(med_generic__icontains = medname))
+		context = { }
+		if obj:
+			context = {'all': obj}
+		else:
+			context = {'noresults': "No Medicine found"}
+		return render(request, 'customer.html', context)
+	else:
+		obj = Inventory.objects.all()
+		context = {'all': obj}
+		return render(request, 'customer.html', context)
 
 def loginC(request):
 	if request.session.is_empty():
@@ -104,12 +114,26 @@ def loginCustomer(request):
 			return response
 
 def loginE(request):
-	obj = Inventory.objects.filter(pharmacy_id = request.session['userId'])
-	context = {'all': obj}
-	return render(request, 'employee.html', context)
+	if request.method == "POST":
+		medname = request.POST['search']
+		obj = Inventory.objects.filter(Q (med_name__icontains = medname) | Q(med_generic__icontains = medname))
+		context = { }
+		if obj:
+			context = {'all': obj}
+		else:
+			context = {'noresults': "No Medicine found"}
+		return render(request, 'employee.html', context)
+	else:
+		obj = Inventory.objects.filter(pharmacy_id = request.session['userId'])
+		context = {'all': obj}
+		return render(request, 'employee.html', context)
 
 def loginA(request):
-	return render(request, 'admin.html', {})
+	obj = len(Customer.objects.all())
+	objx = len(Inventory.objects.all())
+	objy = len(Employee.objects.all())
+	context = { 'med': obj, 'cus': objx, 'pharm': objy }
+	return render(request, 'admin.html', context)
 
 
 
@@ -204,6 +228,7 @@ def cart(request):
 		for k in obj:
 			tl_cost = k.med_id.med_price * k.adding_quantity
 			all_cost = tl_cost + all_cost
+			all_cost = round(all_cost, 2)
 		context = {'all': obj, 'price_of': all_cost}
 		return render(request, 'cart.html', context)
 
@@ -216,6 +241,7 @@ def checkoutOrder(request):
 		for k in obj:
 			tl_cost = k.med_id.med_price * k.adding_quantity
 			all_cost = tl_cost + all_cost
+			all_cost = round(all_cost, 2)
 		objD = Delivery.objects.filter(DS_status = True)
 		context = {'all': obj, 'price_of': all_cost, 'deliveryTime': objD}
 		return render(request, 'checkout.html', context)
@@ -247,6 +273,7 @@ def orderC(request):
 			for k in obj:
 				tl_cost = k.med_id.med_price * k.adding_quantity
 				all_cost = tl_cost + all_cost
+			all_cost = round(all_cost, 2)
 			for i in obj:
 				itemQuantity += 1
 			# deliveryTime = deliverTime.split("-")
@@ -261,7 +288,9 @@ def orderC(request):
 			for shops in obj:
 				objX.pharmacy_id.add(shops.pharmacy_id)
 			for crts in obj:
-				objX.order_carts.add(crts.cart_id)
+				objCx = OrderedCart(pharmacy_id = crts.pharmacy_id, customer_id =  crts.customer_id, adding_quantity = crts.adding_quantity, med_id = crts.med_id)
+				objCx.save()
+				objX.orered_cart.add(objCx)
 			
 			messages.success(request, ('Order is processing, check order status in orders option on your account'))
 			return redirect('loginCustomer')
@@ -275,6 +304,17 @@ def orderHistoryC(request):
 		objy = Order.objects.filter(customer_id = request.session['userId'], delivery_status= 'DV')
 		context = {'op': obj, 'otw': objx, 'dv': objy}
 		return render(request, 'orderHistoryC.html', context)
+
+def orderdetailsE(request):
+	if request.session.is_empty():
+		return redirect('loginC')
+	else:
+		obj = Order.objects.filter(pharmacy_id = request.session['userId'], delivery_status= 'OP')
+		objx = Order.objects.filter(pharmacy_id = request.session['userId'], delivery_status= 'OTW')
+		objy = Order.objects.filter(pharmacy_id = request.session['userId'], delivery_status= 'DV')
+		context = {'op': obj, 'otw': objx, 'dv': objy}
+		return render(request, 'orderdetailsE.html', context)
+
 
 def opRouteE(request):
 	if request.session.is_empty():
@@ -347,11 +387,12 @@ def orderDetails(request,list_id):
 		return redirect('loginC')
 	else:
 		obj = Order.objects.filter(order_id = list_id)
-		objx = obj[0].order_carts.all()
+		objx = obj[0].orered_cart.all()
 		all_cost = 10
 		for k in objx.all():
 			tl_cost = k.med_id.med_price * k.adding_quantity
 			all_cost = tl_cost + all_cost
+			all_cost = round(all_cost, 2)
 		context = {'all': objx, 'price_of': all_cost, 'allx': obj}
 		return render(request, 'orderDetails.html', context)
 
@@ -360,10 +401,32 @@ def orderDetailsC(request,list_id):
 		return redirect('loginC')
 	else:
 		obj = Order.objects.filter(order_id = list_id)
-		objx = obj[0].order_carts.all()
+		objx = obj[0].orered_cart.all()
 		all_cost = 10
 		for k in objx.all():
 			tl_cost = k.med_id.med_price * k.adding_quantity
 			all_cost = tl_cost + all_cost
+			all_cost = round(all_cost, 2)
 		context = {'all': objx, 'price_of': all_cost, 'allx': obj}
 		return render(request, 'orderDetailsC.html', context)
+def minusCart(request, list_id):
+	if request.session.is_empty():
+		return redirect('loginC')
+	else:
+		obj = Cart.objects.get(cart_id = list_id)
+		if obj.adding_quantity > 1:
+			mainx = obj.adding_quantity
+			obj.adding_quantity = mainx - 1
+			obj.save()
+		return redirect('cart')
+
+def addupCart(request, list_id):
+	if request.session.is_empty():
+		return redirect('loginC')
+	else:
+		obj = Cart.objects.get(cart_id = list_id)
+		if obj.adding_quantity < 50:
+			mainx = obj.adding_quantity
+			obj.adding_quantity = mainx + 1
+			obj.save()
+		return redirect('cart')

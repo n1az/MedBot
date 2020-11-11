@@ -1,14 +1,14 @@
-{% extends 'baseC.html' %}
+{% extends 'baseE.html' %}
 
-{% block title %}MedBot | Customer-Order-History{% endblock %}
+{% block title %}MedBot | Pharmacy-Order-History{% endblock %}
 
 
 {% block content %}
-<h3>Pending</h3>
+<h3>Preparing</h3>
 	{% if op %}
 	<table class="table table-striped table-dark">
 		{% for things in op %}
-			<form action="{% url 'orderDetailsC' things.order_id %}" method="POST">
+			<form action="{% url 'orderDetails' things.order_id %}" method="POST">
 				{% csrf_token %}
 				<tr>
 					<td><center>{{ things.order_date }}</center></td>
@@ -27,7 +27,7 @@
 	{% if dv %}
 	<table class="table table-striped table-dark">
 		{% for things in dv %}
-			<form action="{% url 'orderDetailsC' things.order_id %}" method="POST">
+			<form action="{% url 'orderDetails' things.order_id %}" method="POST">
 				{% csrf_token %}
 				<tr>
 					<td><center>{{ things.order_date }}</center></td>

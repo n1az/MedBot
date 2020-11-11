@@ -116,6 +116,17 @@ class Cart(models.Model):
 	def __str__(self):
 		return str(self.cart_id)
 
+class OrderedCart(models.Model):
+
+	order_cart_id = models.BigAutoField(primary_key = True)
+	pharmacy_id = models.ForeignKey(Employee, on_delete = models.CASCADE)
+	customer_id = models.ForeignKey(Customer, on_delete = models.CASCADE)
+	adding_quantity = models.IntegerField(default= 5)
+	med_id = models.ForeignKey(Inventory, on_delete = models.CASCADE)
+
+	def __str__(self):
+		return str(self.order_cart_id)
+
 class Order(models.Model):
 	ONPROCESS = 'OP'
 	ONTHEWAY = 'OTW'
@@ -156,7 +167,7 @@ class Order(models.Model):
 	order_cost = models.CharField(max_length = 10, default = "10")
 	order_longT = models.CharField(max_length = 20, default= "90.40")
 	order_latiT = models.CharField(max_length = 20, default= "20.40")
-	order_carts = models.ManyToManyField(Cart)
+	orered_cart = models.ManyToManyField(OrderedCart)
 
 	def __str__(self):
 		return str(self.order_id)
