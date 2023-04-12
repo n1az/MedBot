@@ -11,3 +11,21 @@ I used:
 * Mapbox Optimization API
 * jQuery
 * Turf.js
+
+### Sign-up page
+![signup](https://github.com/n1az/MedBot/blob/master/medbot_app/templates/signup.png)
+
+### Medicine list from different pharmacies according to presrcription
+![signup](https://github.com/n1az/MedBot/blob/master/medbot_app/templates/medlist.png)
+
+### Cart
+![signup](https://github.com/n1az/MedBot/blob/master/medbot_app/templates/cart.png)
+
+### Order histories
+![signup](https://github.com/n1az/MedBot/blob/master/medbot_app/templates/orders.png)
+
+### Check-out
+![signup](https://github.com/n1az/MedBot/blob/master/medbot_app/templates/checkout.png)
+
+### Optimized map for the delivery-man from pick-up to drop-off
+![signup](https://github.com/n1az/MedBot/blob/master/medbot_app/templates/map.png)
